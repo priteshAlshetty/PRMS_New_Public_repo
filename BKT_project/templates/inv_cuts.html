@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inv & Manual Cuts</title>
+    <!-- <script src="BKT_project\nav_script.js"></script> -->
+    <script src="{{ url_for('static', filename='js/nav_script.js') }}"></script>
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"> -->
+    <link href="{{ url_for('static', filename='tailwind_1.css') }}" rel="stylesheet">
+</head>
+
+
+
+<body style="background-color: #212121; color: #fff0f0;">
+
+    <nav id="nav" class="fixed-top bg-blue-800 ">
+        <div class="  flex justify-between items-center">
+            <a href="/"  class="flex items-center">
+                <img src="{{ url_for('static', filename='images/logo_mq.jpg') }}" alt="Logo"
+                    style="width: 330px; height: 100%;" >
+                    <h1 class="text-xl font-bold mx-4">BKT:- Bias Cutter PRMS</h1>
+            </a>
+            
+            <div class="flex space-x-8 pl-4">
+                <a href="{{ url_for('serve_home') }}">
+                    <button class="px-4 py-2 rounded-2xl hover:bg-gray-700   font-bold text-xl ">Recipe Schdule Upload & Report Generation</button></a>
+                <div class="flex space-x-4">
+                    
+                    <a href="{{ url_for('serve_view_edit') }}">
+                        <button class="px-4 py-2 rounded-2xl hover:bg-gray-700  font-bold  text-xl ">View and Edit Recipe</button>
+                    </a>
+                    <a href="{{ url_for('serve_inv_cuts')  }}">
+                        <button class="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-700  font-bold  text-xl  ">Add Inventory and manual Cuts</button>
+                    </a>
+                </div>
+
+            </div>
+            <div class="flex items-center">
+                <span id="dateTime" class="text-sm font-bold px-4">XXXX XXX XXX XXXXS XX X</span>
+            </div>
+    </nav>
+    <div class="mx-16 my-4">
+        <h2 class="text-2xl font-bold text-blue-500">Upload Opening Inventory Cuts
+
+        </h2>
+
+        <form id="uploadForm">
+            <input type="file" id="fileInput" accept=".xlsx" class="border-2 border-sky-500">
+            <button type='button' id="uploadInvCutsXlsx"
+                class="mx-16  text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-2xl text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">Upload Inventory Cuts Excel
+            </button>
+            <button type='button' id="syncInvCuts" class="mx-16  text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-2xl text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">Add
+                Inv Cuts to Production</button>
+        </form>
+
+
+    </div>
+    <div class="mx-16 my-4">
+        <h2 class="text-2xl font-bold text-blue-500">Upload Manual Cuts
+
+        </h2>
+
+        <form id="uploadForm">
+            <input type="file" id="fileInput_manual" accept=".xlsx" class="border-2 border-sky-500">
+            <button type='button' id="uploadManualCutsXlsx"
+                class="mx-16  text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-2xl text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">Upload Manual Cuts Excel
+            </button>
+            <button type='button' id="syncManualCuts" class="mx-16  text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-2xl text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">Add
+                Manual Cuts to Report DB</button>
+        </form>
+
+
+    </div>
+
+    <div id="status" class="mx-4 my-2 italic text-xl font-bold"></div>
+    <footer id="logs" class=" absolute bottom-0 flex flex-col items-start mx-8 my-4  border-2 border-sky-200 "
+        style="width: 95%;">
+        <h2 class="border-2 border-sky-200 w-full px-4 py-2 ">
+            System Logs:</h2>
+    </footer>
+
+
+</body>
+
+<!-- ------------------------------JavaScript--------------------------- -->
+
+
+
+<script>
+    // to display current date -time
+    const updateDateTime = () => {
+        const now = new Date();
+        const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const day = now.getDate();
+        const month = months[now.getMonth()];
+        const year = now.getFullYear();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const second = now.getSeconds();
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const hour12 = hour % 12 || 12; // Convert to 12-hour format and handle midnight
+        const minuteFormatted = minute.toString().padStart(2, '0'); // Ensure two digits
+        const secondFormatted = second.toString().padStart(2, '0'); // Ensure two digits
+        const weekday = weekdays[now.getDay()];
+        const timePart = `${hour12}:${minuteFormatted}:${secondFormatted} ${ampm}`;
+        const formattedDate = `${weekday} ${day} ${month} ${year} ${timePart}`;
+        document.getElementById('dateTime').textContent = formattedDate;
+    };
+
+    updateDateTime(); // Initial update
+    setInterval(updateDateTime, 1000); // Update every second
+</script>
+
+<!-- Upload xlsx -->
+<script>
+
+    document.querySelector("#uploadInvCutsXlsx").addEventListener('click', async (event) => {
+        document.querySelector("#status").innerHTML = "uploading...."
+        pass = prompt("Enter Password to update Inc cuts")
+        if (pass === "ASH-950-OL") {
+            document.querySelector("#status").innerHTML = "uploading...."
+            document.querySelector("#status").style.color = '#17ff40';
+            uploadFile();
+            await delay();
+
+        }
+        else {
+            document.querySelector("#status").style.color = '#ff3b00';
+            document.querySelector("#status").innerHTML = "wrong password"
+            alert("Wrong password, retry")
+        }
+        await delay();
+        document.querySelector("#status").innerHTML = "";
+    });
+
+    function uploadFile() {
+        const status = document.querySelector("#status");
+        const logs = document.querySelector('#logs');
+
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        if (!file) {
+
+            status.style.color = ok_yellow
+            status.innerHTML = "file not selected"
+            alert('Please select a file');
+            return;
+        }
+        document.querySelector("#status").style.color = '#17ff40';
+        status.innerHTML = "uploading...."
+        const formData = new FormData();
+        formData.append('file', file);
+
+        fetch('/upload_invcuts', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(async (data) => {
+                console.log(data)
+                console.log("data.error:", data.error);
+
+                if (data.error === null || data.error === undefined || data.error === false) {
+
+                    const span = document.createElement('span');
+                    span.textContent = data.timestamp + "  :  " + 'Upload successful, Inv Cuts Stored at: ' + data.message;
+                    span.style.color = '#17ff40';
+                    span.style.margin = '3px;';
+                    logs.appendChild(span)
+                    console.log("inside if")
+                }
+                else {
+                    const span = document.createElement('span');
+                    span.textContent = data.timestamp + "  :  " + 'Upload failed, retry!! --> ' + data.message + ':: error:' + data.error;
+                    span.style.color = '#ff3b00';
+                    logs.appendChild(span)
+                    console.log("inside else")
+                    await delay(1500)
+                    status.style.color = '#ff3b00';
+                    status.innerHTML = "Upload failed.........."
+                    await delay();
+                }
+            })
+            .catch(e => {
+                console.log('Error uploading file:', e);
+                const span = document.createElement('span');
+                span.textContent = e
+                span.classList.add("mx-4")
+                document.querySelector('#logs').appendChild(span)
+            });
+    }
+
+</script>
+
+<!-- sync inc cuts -->
+<script>
+    document.querySelector("#syncInvCuts").addEventListener('click', async (event) => {
+        let pass = prompt("Enter password to add Inventory Cuts to Production?")
+        if (pass === "ASH-950-OL") {
+            fetch('/add_invcuts',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'password': pass
+                    })
+                }).then((response) => {
+                    return response.json();
+                }).then((data) => {
+                    console.log(data)
+                    const span = document.createElement('span');
+                    if (data.error) {
+                        span.textContent = data.timestamp + "  :  " + data.message + "  ::->  " + data.error
+                        document.querySelector("#status").innerHTML = `Inv Cuts adding error->: ${data.error}, refer System Logs `;
+                        document.querySelector("#status").style.color = '#ff3b00';
+                        span.style.color = '#ff3b00';
+                    }
+                    else {
+                        document.querySelector("#status").style.color = '#17ff40';
+                        document.querySelector("#status").innerHTML = `Inv Cuts added succesfully !! `;
+                        span.textContent = data.timestamp + "  :  " + data.message;
+                        span.style.color = '#17ff40';
+                    }
+                    span.classList.add("mx-4")
+                    document.querySelector('#logs').appendChild(span)
+                }).catch((error) => {
+                    console.log(error)
+                })
+            await delay();
+            document.querySelector("#status").innerHTML = " ->"
+        }
+        else {
+            const span = document.createElement('span');
+            document.querySelector("#status").innerHTML = `Wrong password, retry`;
+            document.querySelector("#status").style.color = '#ff3b00';
+            span.style.color = '#ff3b00';
+            span.textContent = " wrong password"
+            document.querySelector('#logs').appendChild(span)
+            await delay();
+            document.querySelector("#status").innerHTML ="->"
+
+        }
+    })
+</script>
+<!-- upload manual cuts -->
+
+<script>
+    document.querySelector("#uploadManualCutsXlsx").addEventListener('click', async(event)=>{
+        document.querySelector("#status").innerHTML = "uploading...." 
+        pass = prompt("Enter Password to update Manual cuts")
+    })
+</script>
+
+</html>

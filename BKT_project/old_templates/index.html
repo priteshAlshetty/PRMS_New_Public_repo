@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BKT PRMS </title>
+    <!-- Add Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.7.8/lottie.min.js"></script>
+</head>
+
+<body class="bg-black text-white">
+
+    <nav class="fixed top-0 left-0 w-full py-4 pl-4 pr-4 bg-gray-800 text-white font-bold rounded ">
+        <div class="flex-grow"></div> <!-- This div acts as a spacer -->
+        <h1 class="ml-auto mr-4 mt-4 text-2xl">BKT PRMS SERVER : BIAS CUTTER</h1>
+        <span id="currentDateTime" class="text-white">23-06-2024 12:15 </span>
+    </nav>
+
+    <!-- ------------------------------------------------------ -->
+    <div class="flex flex-col items-start my-16">
+
+
+        <form class="grid grid-cols-2 gap-4 w-4/5 mx-auto top-16 left-4 mt-10 ml-4 space-y-4 z-0">
+            <input type="file" id="fileInput"
+                class="border border-gray-600 p-2 mt-4 rounded shadow-sm focus:outline-none focus:border-blue-400 bg-gray-900 text-white w-full" />
+            <button onclick="triggerFileInput()"
+                class="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded w-48">
+                Select Recipe.xlsx to upload
+            </button>
+
+            <input type="text" placeholder="" id="prod_id"
+                class="border border-gray-600 p-2 rounded shadow-sm focus:outline-none focus:border-blue-400 bg-gray-900 text-white w-full">
+            <button type="submit" id="prod_id_button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-48">
+                Product ID
+            </button>
+            <input type="text" placeholder=""
+                class="border border-gray-600 p-2 rounded shadow-sm focus:outline-none focus:border-blue-400 bg-gray-900 text-white w-full">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-48">
+                SIZE
+            </button>
+            <input type="text" placeholder=""
+                class="border border-gray-600 p-2 rounded shadow-sm focus:outline-none focus:border-blue-400 bg-gray-900 text-white w-full">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-48">
+                FABRIC NAME
+            </button>
+            <input type="text" placeholder=""
+                class="border border-gray-600 p-2 rounded shadow-sm focus:outline-none focus:border-blue-400 bg-gray-900 text-white w-full">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-48">
+                Angle
+            </button>
+            <input type="text" placeholder=""
+                class="border border-gray-600 p-2 rounded shadow-sm focus:outline-none focus:border-blue-400 bg-gray-900 text-white w-full">
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-48">
+                Width
+            </button>
+
+        </form>
+
+        <button id="goToScreen2"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-16 mx-8 py-4 px-4 rounded-2xl w-48">
+            Go to Screen 2</button>
+            <button id="loading"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold my-16 mx-8 py-4 px-4 rounded-2xl w-48">
+            Load data</button>
+            <div id="loadingAnimationContainer" style="display:none;"></div>
+    </div>
+</body>
+
+
+
+
+<!-- 
+<script>
+    function triggerFileInput() {
+        document.getElementById('fileInput').click();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('fileInput').addEventListener('change', function (e) {
+            var filePath = e.target.value;
+            document.getElementById('filePathDisplay').innerText = filePath;
+        });
+        document.querySelector('form').addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                var fileInput = document.getElementById('fileInput');
+                var filePath = fileInput.value;
+                if (filePath) {
+                    fetch('/upload', {
+                        method: 'POST',
+                        body: JSON.stringify({ filePath }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(response => response.text())
+                        .then(data => alert(data))
+                        .catch(error => console.error('Error:', error));
+                }
+            }
+        });
+    });
+    </script> -->
+    <script>
+
+        
+    // Navigate
+    document.getElementById('goToScreen2').addEventListener('click', function () {
+        fetch('/serve-screen2')
+            .then((response) => {
+                return response.text()
+            })
+            .then((html) => {
+                document.open();
+                document.write(html);
+                document.close();
+            });
+    });
+
+</script>
+<script>
+    const updateDateTime = () => {
+        const now = new Date();
+        const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const day = now.getDate();
+        const month = months[now.getMonth()];
+        const year = now.getFullYear();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+        const second = now.getSeconds();
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const hour12 = hour % 12 || 12; // Convert to 12-hour format and handle midnight
+        const minuteFormatted = minute.toString().padStart(2, '0'); // Ensure two digits
+        const secondFormatted = second.toString().padStart(2, '0'); // Ensure two digits
+        const weekday = weekdays[now.getDay()];
+        const timePart = `${hour12}:${minuteFormatted}:${secondFormatted} ${ampm}`;
+
+        const formattedDate = `${weekday} ${day} ${month} ${year} ${timePart}`;
+        document.getElementById('currentDateTime').textContent = formattedDate;
+    };
+
+    updateDateTime(); // Initial update
+    setInterval(updateDateTime, 1000); // Update every second
+</script>
+<script>
+    document.getElementById('loading').addEventListener('click', function() {
+        const btn = this;
+        btn.disabled = true;
+
+        // Create a container for the animation if it doesn't exist
+        var animationContainer = document.getElementById('loadingAnimationContainer');
+        if (!animationContainer.innerHTML) {
+            // Initialize the Lottie animation
+            lottie.loadAnimation({
+                container: animationContainer, // the dom element that will contain the animation
+                renderer: 'svg',
+                loop: true,
+                autoplay: true,
+                path: 'loading' // Make sure to update this path to your animation file
+            });
+
+            // Show the animation container
+            animationContainer.style.display = 'block';
+        } else {
+            // If the animation is already loaded, just show the container
+            animationContainer.style.display = 'block';
+        }
+
+        // Simulate a delay to represent the loading process
+        setTimeout(() => {
+            // Hide the animation container after "loading" is complete
+            animationContainer.style.display = 'none';
+            btn.disabled = false; // Re-enable the button
+        }, 2000); // Adjust based on actual loading time or remove if using async operations
+    });
+</script>
+<script>
+    document.getElementById('prod_id_button').addEventListener('click', function() {
+        const prodId = document.getElementById('prod_id').value;
+        fetch('/send_prod_id', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ prodId: prodId }),
+        })
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch((error) => console.error('Error:', error));
+    });
+    </script>
+</html>

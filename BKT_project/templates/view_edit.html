@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- <script src="BKT_project\nav_script.js"></script> -->
+        <!-- <script src="script1.js"></script> -->
+        <!-- <link href="BKT_project/templates/tailwind_css.css" rel="stylesheet"> -->
+        <link href="{{ url_for('static', filename='tailwind_1.css') }}" rel="stylesheet">
+        <script src="{{ url_for('static', filename='js/nav_script.js') }}"></script>
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"> -->
+        <title>View And Edit</title>
+</head>
+
+<body body style="background-color: #212121; color: #fff0f0;">
+
+        <nav id="nav" class="fixed-top bg-blue-800 ">
+                <div class="  flex justify-between items-center">
+                        <a href="/" class="flex items-center">
+                                <img src="{{ url_for('static', filename='images/logo_mq.jpg') }}" alt="Logo"
+                                        style="width: 330px; height: 100%;">
+                                <h1 class="text-xl font-bold mx-4">BKT:- Bias Cutter PRMS</h1>
+                        </a>
+
+                        <div class="flex space-x-8 pl-4">
+                                <a href="{{ url_for('serve_home') }}">
+                                        <button
+                                                class="px-4 py-2  rounded-2xl hover:bg-gray-700   font-bold text-xl ">Recipe
+                                                Schdule Upload & Report Generation</button></a>
+                                <div class="flex space-x-4">
+
+                                        <a href="{{ url_for('serve_view_edit') }}">
+                                                <button
+                                                        class="px-4 py-2 rounded-2xl bg-gray-700 hover:bg-gray-700  font-bold  text-xl ">View
+                                                        and Edit Recipe</button>
+                                        </a>
+                                        <a href="{{ url_for('serve_inv_cuts')  }}">
+                                                <button
+                                                        class="px-4 py-2 rounded-2xl hover:bg-gray-700  font-bold  text-xl  ">Add
+                                                        Inventory and manual Cuts</button>
+                                        </a>
+                                </div>
+
+                        </div>
+                        <div class="flex items-center">
+                                <span id="dateTime" class="text-sm font-bold px-4">XXXX XXX XXX XXXXS XX X</span>
+                        </div>
+        </nav>
+        <div class="container m-2 p-2">
+                <!-- Second row with input fields -->
+                <div class="flex gap-4 mt-2 w-full ">
+                        <div><span class="px-8"> Product ID:</span><input type="text" id="prod_id" name="field1"
+                                        class="w-full mx-8 px-8 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8"> SIZE :</span><input type="text" id="size" name="field1"
+                                        class="w-full mx-8 px-8 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8"> No_TYRES :</span><input type="text" id="No_tyres" name="field1"
+                                        class="w-full mx-8 px-8 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <button type="button" id="submitId"
+                                class="mx-16 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">Submit</button>
+                </div>
+        </div>
+        <div class="text-2xl text-violet-400 text-start font-bold mx-8 mt-2 "> Fabric_names:</div>
+
+        <div class="container m-2 p-2">
+                <div class="flex gap-4 mt-2 w-full ">
+                        <div><span class="px-8 italic "> Fabric_PLY_1</span><input type="text" id="fab-1" name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md   hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_2</span><input type="text" id="fab-2" name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md   hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_3</span><input type="text" id="fab-3" name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_4</span><input type="text" id="fab-4" name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_5</span><input type="text" id="fab-5" name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md  hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_6</span><input type="text" id="fab-6" name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md  hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_7</span><input type="text" id="fab-7" name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+
+                </div>
+        </div>
+
+        <div class="container m-2 p-2">
+                <!-- Second row with input fields -->
+                <div class="flex gap-4 mt-2 w-full ">
+                        <div><span class="px-8 italic "> Fabric_PLY_8</span><input type="text" id="fab-8" name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_9</span><input type="text" id="fab-9" name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md  hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_10</span><input type="text" id="fab-10"
+                                        name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md  hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_11</span><input type="text" id="fab-11"
+                                        name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md  hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_12</span><input type="text" id="fab-12"
+                                        name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md  hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_13</span><input type="text" id="fab-13"
+                                        name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md  hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-8 italic "> Fabric_PLY_14</span><input type="text" id="fab-14"
+                                        name="field1"
+                                        class="w-full mx-8 px-2 border-4 border-blue-300 rounded-md  hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                </div>
+        </div>
+
+        <div class="text-2xl text-violet-400 text-start font-bold mx-8 mt-16 "> PLY Set Tyres:</div>
+
+        <div class="container  p-2">
+                <!-- Second row with input fields -->
+                <div class="flex gap-2 mt-2 w-full ">
+                        <div><span class="px-4 italic "> PLY_1_Tyres</span><input type="text" id="setTyres-1"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_2_Tyres</span><input type="text" id="setTyres-2"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_3_Tyres</span><input type="text" id="setTyres-3"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_4_Tyres</span><input type="text" id="setTyres-4"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_5_Tyres</span><input type="text" id="setTyres-5"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_6_Tyres</span><input type="text" id="setTyres-6"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_7_Tyres</span><input type="text" id="setTyres-7"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_8_Tyres</span><input type="text" id="setTyres-8"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_9_Tyres</span><input type="text" id="setTyres-9"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_10_Tyres</span><input type="text" id="setTyres-10"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_11_Tyres</span><input type="text" id="setTyres-11"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_12_Tyres</span><input type="text" id="setTyres-12"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_13_Tyres</span><input type="text" id="setTyres-13"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-4 italic "> PLY_14_Tyres</span><input type="text" id="setTyres-14"
+                                        name="field1"
+                                        class="w-full mx-4 px-4 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                </div>
+        </div>
+        <div class="text-2xl text-violet-400 text-start font-bold mx-8  "> PLY Set Cuts:</div>
+        <div class="container  px-2">
+                <!-- Second row with input fields -->
+                <div class="flex gap-4 mt-2 w-full ">
+                        <div><span class="px-2 ml-2 italic "> PLY_1_setCuts</span><input type="text" id="setCuts-1"
+                                        name="field1"
+                                        class="w-full ml-4  mr-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_2_setCuts</span><input type="text" id="setCuts-2"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_3_setCuts</span><input type="text" id="setCuts-3"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_4_setCuts</span><input type="text" id="setCuts-4"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_5_setCuts</span><input type="text" id="setCuts-5"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_6_setCuts</span><input type="text" id="setCuts-6"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_7_setCuts</span><input type="text" id="setCuts-7"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_8_setCuts</span><input type="text" id="setCuts-8"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_9_setCuts</span><input type="text" id="setCuts-9"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_10_setCuts</span><input type="text" id="setCuts-10"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_11_setCuts</span><input type="text" id="setCuts-11"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_12_setCuts</span><input type="text" id="setCuts-12"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_13_setCuts</span><input type="text" id="setCuts-13"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                        <div><span class="px-2 italic "> PLY_14_setCuts</span><input type="text" id="setCuts-14"
+                                        name="field1"
+                                        class="w-full mx-2 px-2 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+                                        style="background-color: #212121; color: #fff0f0"></div>
+                </div>
+        </div>
+
+        <footer id="logs" class=" absolute bottom-0 flex flex-col items-start mx-8 mt-16  border-2 border-sky-200 "
+                style="width: 95%;   max-height: 20vh;  overflow-y: auto;">
+                <h2 class=" fixed-top border-sky-200 w-full px-4 py-2 ">System Logs:</h2>
+        </footer>
+</body>
+
+<!-- datetime -->
+<script>
+        // to display current date -time
+        const updateDateTime = () => {
+                const now = new Date();
+                const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                const day = now.getDate();
+                const month = months[now.getMonth()];
+                const year = now.getFullYear();
+                const hour = now.getHours();
+                const minute = now.getMinutes();
+                const second = now.getSeconds();
+                const ampm = hour >= 12 ? 'PM' : 'AM';
+                const hour12 = hour % 12 || 12; // Convert to 12-hour format and handle midnight
+                const minuteFormatted = minute.toString().padStart(2, '0'); // Ensure two digits
+                const secondFormatted = second.toString().padStart(2, '0'); // Ensure two digits
+                const weekday = weekdays[now.getDay()];
+                const timePart = `${hour12}:${minuteFormatted}:${secondFormatted} ${ampm}`;
+
+                const formattedDate = `${weekday} ${day} ${month} ${year} ${timePart}`;
+                document.getElementById('dateTime').textContent = formattedDate;
+        };
+
+        updateDateTime(); // Initial update
+        setInterval(updateDateTime, 500); // Update every second
+</script>
+<script>
+        const button = document.querySelector("#submitId");
+        button.addEventListener('click', (event) => {
+                event.preventDefault;
+                let ID = document.querySelector("#prod_id").value;
+                console.log(ID)
+                if (ID.length != 4) {
+                        alert(`Wrong Product ID::${ID}`);
+                        document.querySelector("#prod_id").value = "-"
+                        return 0;
+                }
+                else {
+                        fetch('/get_details', {
+                                method: 'POST',
+                                headers: {
+                                        'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ "PROD_ID": ID })
+                        }).then((response) => {
+                                console.log(response);
+                                return response.json();
+                        }).then((data) => {
+                                console.log(data.error);
+                                const span = document.createElement('span');
+                                if (data.error) {
+                                        span.textContent = data.timestamp + " ::->  " + data.error;
+
+                                        document.querySelector("#prod_id").style.color = "red";
+                                        document.querySelector("#size").value = "-";
+                                        document.querySelector("#No_tyres").value = "-";
+                                        document.querySelector("#fab-1").value = "-";
+                                        document.querySelector("#fab-2").value = "-";
+                                        document.querySelector("#fab-3").value = "-";
+                                        document.querySelector("#fab-4").value = "-";
+                                        document.querySelector("#fab-5").value = "-";
+                                        document.querySelector("#fab-6").value = "-";
+                                        document.querySelector("#fab-7").value = "-";
+                                        document.querySelector("#fab-8").value = "-";
+                                        document.querySelector("#fab-9").value = "-";
+                                        document.querySelector("#fab-10").value = "-";
+                                        document.querySelector("#fab-11").value = "-";
+                                        document.querySelector("#fab-12").value = "-";
+                                        document.querySelector("#fab-13").value = "-";
+                                        document.querySelector("#fab-14").value = "-";
+                                        document.querySelector("#setTyres-1").value = "-";
+                                        document.querySelector("#setTyres-2").value = "-";
+                                        document.querySelector("#setTyres-3").value = "-";
+                                        document.querySelector("#setTyres-4").value = "-";
+                                        document.querySelector("#setTyres-5").value = "-";
+                                        document.querySelector("#setTyres-6").value = "-";
+                                        document.querySelector("#setTyres-7").value = "-";
+                                        document.querySelector("#setTyres-8").value = "-";
+                                        document.querySelector("#setTyres-9").value = "-";
+                                        document.querySelector("#setTyres-10").value = "-";
+                                        document.querySelector("#setTyres-11").value = "-";
+                                        document.querySelector("#setTyres-12").value = "-";
+                                        document.querySelector("#setTyres-13").value = "-";
+                                        document.querySelector("#setTyres-14").value = "-";
+
+                                        document.querySelector("#setCuts-1").value = "-";
+                                        document.querySelector("#setCuts-2").value = "-";
+                                        document.querySelector("#setCuts-3").value = "-";
+                                        document.querySelector("#setCuts-4").value = "-";
+                                        document.querySelector("#setCuts-5").value = "-";
+                                        document.querySelector("#setCuts-6").value = "-";
+                                        document.querySelector("#setCuts-7").value = "-";
+                                        document.querySelector("#setCuts-8").value = "-";
+                                        document.querySelector("#setCuts-9").value = "-";
+                                        document.querySelector("#setCuts-10").value = "-";
+                                        document.querySelector("#setCuts-11").value = "-";
+                                        document.querySelector("#setCuts-12").value = "-";
+                                        document.querySelector("#setCuts-13").value = "-";
+                                        document.querySelector("#setCuts-14").value = "-";
+                                }
+                                else {
+                                        document.querySelector("#prod_id").value = data.prod_id;
+                                        document.querySelector("#prod_id").style.color = "#fff0f0";
+                                        document.querySelector("#size").value = data.size;
+                                        document.querySelector("#No_tyres").value = data.tyres;
+                                        document.querySelector("#fab-1").value = data.Fabric_1;
+                                        document.querySelector("#fab-2").value = data.Fabric_2;
+                                        document.querySelector("#fab-3").value = data.Fabric_3;
+                                        document.querySelector("#fab-4").value = data.Fabric_4;
+                                        document.querySelector("#fab-5").value = data.Fabric_5;
+                                        document.querySelector("#fab-6").value = data.Fabric_6;
+                                        document.querySelector("#fab-7").value = data.Fabric_7;
+                                        document.querySelector("#fab-8").value = data.Fabric_8;
+                                        document.querySelector("#fab-9").value = data.Fabric_9;
+                                        document.querySelector("#fab-10").value = data.Fabric_10;
+                                        document.querySelector("#fab-11").value = data.Fabric_11;
+                                        document.querySelector("#fab-12").value = data.Fabric_12;
+                                        document.querySelector("#fab-13").value = data.Fabric_13;
+                                        document.querySelector("#fab-14").value = data.Fabric_14;
+
+                                        document.querySelector("#setTyres-1").value = data.setTyres_PLY_1;
+                                        document.querySelector("#setTyres-2").value = data.setTyres_PLY_2;
+                                        document.querySelector("#setTyres-3").value = data.setTyres_PLY_3;
+                                        document.querySelector("#setTyres-4").value = data.setTyres_PLY_4;
+                                        document.querySelector("#setTyres-5").value = data.setTyres_PLY_5;
+                                        document.querySelector("#setTyres-6").value = data.setTyres_PLY_6;
+                                        document.querySelector("#setTyres-7").value = data.setTyres_PLY_7;
+                                        document.querySelector("#setTyres-8").value = data.setTyres_PLY_8;
+                                        document.querySelector("#setTyres-9").value = data.setTyres_PLY_9;
+                                        document.querySelector("#setTyres-10").value = data.setTyres_PLY_10;
+                                        document.querySelector("#setTyres-11").value = data.setTyres_PLY_11;
+                                        document.querySelector("#setTyres-12").value = data.setTyres_PLY_12;
+                                        document.querySelector("#setTyres-13").value = data.setTyres_PLY_13;
+                                        document.querySelector("#setTyres-14").value = data.setTyres_PLY_14;
+
+                                        document.querySelector("#setCuts-1").value = data.setCuts_1;
+                                        document.querySelector("#setCuts-2").value = data.setCuts_2;
+                                        document.querySelector("#setCuts-3").value = data.setCuts_3;
+                                        document.querySelector("#setCuts-4").value = data.setCuts_4;
+                                        document.querySelector("#setCuts-5").value = data.setCuts_5;
+                                        document.querySelector("#setCuts-6").value = data.setCuts_6;
+                                        document.querySelector("#setCuts-7").value = data.setCuts_7;
+                                        document.querySelector("#setCuts-8").value = data.setCuts_8;
+                                        document.querySelector("#setCuts-9").value = data.setCuts_9;
+                                        document.querySelector("#setCuts-10").value = data.setCuts_10;
+                                        document.querySelector("#setCuts-11").value = data.setCuts_11;
+                                        document.querySelector("#setCuts-12").value = data.setCuts_12;
+                                        document.querySelector("#setCuts-13").value = data.setCuts_13;
+                                        document.querySelector("#setCuts-14").value = data.setCuts_14;
+                                        span.textContent = data.timestamp + "  :  " + data.message;
+                                }
+                                span.classList.add('border-t', 'border-sky-200', 'w-full', 'px-4');
+                                document.querySelector('#logs').appendChild(span)
+                        })
+                }
+        })
+</script>
+
+</html>
