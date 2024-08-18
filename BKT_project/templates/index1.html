@@ -5,40 +5,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BKT_PRMS</title>
-    <!-- <script src="{{ url_for('static', filename='js/nav_script.js') }}"></script> -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"> -->
     <link href="{{ url_for('static', filename='tailwind_1.css') }}" rel="stylesheet">
 </head>
 
-<body style="background-color: #212121; color: #fff0f0;">
+<body id="pageBody" style="background-color: #000000; color: #fff0f0;">
 
     <nav id="nav" class="fixed-top bg-blue-800 ">
         <div class="  flex justify-between items-center">
-            <a href="/"  class="flex items-center">
+            <a href="/" class="flex items-center">
                 <img src="{{ url_for('static', filename='images/logo_mq.jpg') }}" alt="Logo"
-                    style="width: 330px; height: 100%;" >
-                    <h1 class="text-xl font-bold mx-4">BKT:- Bias Cutter PRMS</h1>
+                    style="width: 330px; height: 100%;">
+                <h1 class="text-xl font-bold mx-4">BKT:- Bias Cutter PRMS</h1>
             </a>
-            
+
             <div class="flex space-x-8 pl-4">
                 <a href="{{ url_for('serve_home') }}">
-                    <button class="px-4 py-2 bg-gray-700 rounded-2xl hover:bg-gray-700   font-bold text-xl ">Recipe Schdule Upload & Report Generation</button></a>
+                    <button class="px-4 py-2 bg-gray-700 rounded-2xl hover:bg-gray-700   font-bold text-xl ">Recipe
+                        Schdule Upload & Report Generation</button></a>
                 <div class="flex space-x-4">
-                    
+
                     <a href="{{ url_for('serve_view_edit') }}">
-                        <button class="px-4 py-2 rounded-2xl hover:bg-gray-700  font-bold  text-xl ">View and Edit Recipe</button>
+                        <button class="px-4 py-2 rounded-2xl hover:bg-gray-700  font-bold  text-xl ">View and Edit
+                            Recipe</button>
                     </a>
                     <a href="{{ url_for('serve_inv_cuts')  }}">
-                        <button class="px-4 py-2 rounded-2xl hover:bg-gray-700  font-bold  text-xl  ">Add Inventory and manual Cuts</button>
+                        <button class="px-4 py-2 rounded-2xl hover:bg-gray-700  font-bold  text-xl  ">Add Inventory and
+                            manual Cuts</button>
                     </a>
                 </div>
 
             </div>
             <div class="flex items-center">
                 <span id="dateTime" class="text-sm font-bold px-4">XXXX XXX XXX XXXXS XX X</span>
+                <button id="change_theme" class=" px-4 py-2 mx-2 rounded-2xl font-bold"
+                    > <img src="{{ url_for('static', filename='images/theme.svg') }}" alt="Logo"
+                    style="width: 30px; height: 35px;"></button>
             </div>
     </nav>
     <!-- upload recipe -->
+    <div><span class="px-8"> System Status:</span><input type="text" id="status" name="field1"
+            class=" mx-8 px-8 border-4 border-blue-300 rounded-md text-bold text-xl hover:border-green-500"
+            style="background-color: #212121; color: #fff0f0; width: 95%;"> </div>
+    <div id="status" class="mx-4 my-2 italic text-xl font-bold"></div>
     <div class="mx-16 my-4">
 
         <h2 class="text-2xl font-bold text-blue-500">Upload Recipe Schdule
@@ -47,14 +55,17 @@
         <form id="uploadForm">
             <input type="file" id="fileInput" accept=".xlsx" class="border-2 border-sky-500 mx-16">
             <button type='button' id="uploadRecipe"
-                class=" text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm  text-center me-2 mb-2 mt-4 "style="width: 28%; height: 40px;" >Upload recipe</button>
-                
+                class=" text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm  text-center me-2 mb-2 mt-4 "
+                style="width: 28%; height: 40px;">Upload recipe</button>
+
         </form>
 
         <button type='button' id="syncRecipe"
-            class="mx-16 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">synchronize new recipe</button>
+            class="mx-16 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">synchronize
+            new recipe</button>
         <button type='button' id="downloadRecipe"
-            class="mx-16 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">download Existing recipe</button>
+            class="mx-16 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">download
+            Existing recipe</button>
         <button type='button' id="formatServer"
             class="mx-16 text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">Format
             Server</button>
@@ -62,24 +73,24 @@
             class="bg-blue-800 mx-8 my-8 px-4  py-2 rounded-2xl hover:bg-gray-700">download report</button> -->
 
     </div>
-    <div class="mt-8 mx-16" >
+    <div class="mt-8 mx-16">
         <h2 class="text-2xl font-bold text-blue-500"> Download Cuts Report </h2>
         <button type='button' id="rd"
             class="mx-16 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">download
             month report</button>
-            <button type='button' id="rdDaily"
+        <button type='button' id="rdDaily"
             class="mx-16 text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-16 py-2.5 text-center me-2 mb-2 mt-4">download
             daily report</button>
     </div>
 
-    <div id="status" class="mx-4 my-2 italic text-xl font-bold"></div>
-
-
-    <footer id="logs" class=" absolute bottom-0 flex flex-col items-start mx-8 my-8  border-2 border-sky-200 "
-        style="width: 95%; height: 20vh; overflow-y: auto;">
+    <footer id="logs" class=" absolute bottom-0 flex flex-col items-start mx-4 my-8  border-2 border-sky-200 "
+        style="width: 99%; height: 20vh; overflow-y: auto;">
         <h2 class="border-2 border-sky-200 w-full px-4 py-2 ">
             System Logs:</h2>
     </footer>
+    <div  class=" absolute bottom-0">
+        All Copyrights are reserved at  &copy; Multiquadrant Industrial Controls.
+    </div>
 </body>
 <!-- --------------------------------------------JavaScript--------------------------------------------------------- -->
 <!-- constants -->
@@ -118,170 +129,236 @@
         document.getElementById('dateTime').textContent = formattedDate;
     };
     function getFormattedDateTime() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0');
-            const day = String(now.getDate()).padStart(2, '0');
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}_`;
-        }
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}_`;
+    }
     updateDateTime(); // Initial update
     setInterval(updateDateTime, 500); // Update every second
 </script>
+<!-- change_theme -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeButton = document.getElementById('change_theme');
+        const pageBody = document.getElementById('pageBody');
 
+         // Apply button styles
+    themeButton.style.backgroundColor = '#abcff5';
+    themeButton.style.color = '#fff';
+    themeButton.style.border = '2px solid transparent';
+    themeButton.style.transition = 'background-color 0.3s, transform 0.3s, box-shadow 0.3s';
+    themeButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+
+    // Hover and active styles using JavaScript
+    themeButton.addEventListener('mouseover', () => {
+        themeButton.style.backgroundColor = 'darkblue';
+        themeButton.style.cursor = 'pointer';
+        themeButton.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.3)';
+    });
+
+    themeButton.addEventListener('mouseout', () => {
+        themeButton.style.backgroundColor = '#abcff5';
+        themeButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    });
+
+    themeButton.addEventListener('mousedown', () => {
+        themeButton.style.transform = 'scale(0.95)';
+        themeButton.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.2)';
+    });
+
+    themeButton.addEventListener('mouseup', () => {
+        themeButton.style.transform = 'scale(1)';
+        themeButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';
+    });
+
+        // Load the saved theme from localStorage if available
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            pageBody.className = savedTheme;
+        }
+
+        // Apply transition for smooth theme change
+    pageBody.style.transition = 'background-color 1s, color 0.5s';
+
+
+        themeButton.addEventListener('click', () => {
+            if (pageBody.classList.contains('dark-theme')) {
+                pageBody.classList.remove('dark-theme');
+                pageBody.classList.add('light-theme');
+                pageBody.style.backgroundColor = '#ffffff'; // Light background
+                pageBody.style.color = '#000000'; // Dark text
+                document.querySelector('#nav').style.color = '#fff0f0'; //light text on navbar
+                document.querySelector('#status').style.backgroundColor = '#fff0f0'; //light background
+            } else {
+                pageBody.classList.remove('light-theme');
+                pageBody.classList.add('dark-theme');
+                pageBody.style.backgroundColor = '#000000'; // Dark background
+                document.querySelector('#status').style.backgroundColor = '#212121'; //l Dark background
+                pageBody.style.color = '#fff0f0'; // Light text
+
+            }
+            // Save the theme to localStorage
+            localStorage.setItem('theme', pageBody.className);
+        });
+    });
+
+</script>
 <!--report download Month  -->
 <script>
     let date_from, date_to;
 
-function showTwoInputPrompt() {
-    return new Promise((resolve) => {
-        // Create the prompt container
-        const promptContainer = document.createElement('div');
-        promptContainer.style.position = 'fixed';
-        promptContainer.style.top = '50%';
-        promptContainer.style.left = '50%';
-        promptContainer.style.transform = 'translate(-50%, -50%)';
-        promptContainer.style.background = '#212121';
-        promptContainer.style.padding = '80px';
-        promptContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
-        promptContainer.style.zIndex = '1000';
+    function showTwoInputPrompt() {
+        return new Promise((resolve) => {
+            // Create the prompt container
+            const promptContainer = document.createElement('div');
+            promptContainer.style.position = 'fixed';
+            promptContainer.style.top = '50%';
+            promptContainer.style.left = '50%';
+            promptContainer.style.transform = 'translate(-50%, -50%)';
+            promptContainer.style.background = '#212121';
+            promptContainer.style.padding = '80px';
+            promptContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+            promptContainer.style.zIndex = '1000';
 
-        // Create the overlay
-        const overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.width = '100%';
-        overlay.style.height = '100%';
-        overlay.style.background = 'rgba(0, 0, 0, 0.5)';
-        overlay.style.zIndex = '999';
+            // Create the overlay
+            const overlay = document.createElement('div');
+            overlay.style.position = 'fixed';
+            overlay.style.top = '0';
+            overlay.style.left = '0';
+            overlay.style.width = '100%';
+            overlay.style.height = '100%';
+            overlay.style.background = 'rgba(0, 0, 0, 0.5)';
+            overlay.style.zIndex = '999';
 
-        // Create the form elements
-        const title = document.createElement('h2');
-        title.innerText = 'Enter Dates to download Report';
-        title.style.fontSize = '30px';
-        title.style.fontWeight = 'bold';
-        title.style.background = '#070529';
-        title.style.padding = '20px';
+            // Create the form elements
+            const title = document.createElement('h2');
+            title.innerText = 'Enter Dates to download Report';
+            title.style.fontSize = '30px';
+            title.style.fontWeight = 'bold';
+            title.style.background = '#070529';
+            title.style.padding = '20px';
 
-        const label1 = document.createElement('label');
-        label1.setAttribute('for', 'input1');
-        label1.innerText = 'Date from :';
-        label1.style.padding = '20px';
-        const input1 = document.createElement('input');
-        input1.type = 'text';
-        input1.id = 'input1';
-        input1.style.margin = '20px';
-        input1.style.background = '#444545';
-        input1.style.color = '#afbccf';
-        input1.style.bordeRadius = '50px';
-        input1.style.padding = '10px';
+            const label1 = document.createElement('label');
+            label1.setAttribute('for', 'input1');
+            label1.innerText = 'Date from :';
+            label1.style.padding = '20px';
+            const input1 = document.createElement('input');
+            input1.type = 'text';
+            input1.id = 'input1';
+            input1.style.margin = '20px';
+            input1.style.background = '#444545';
+            input1.style.color = '#afbccf';
+            input1.style.bordeRadius = '50px';
+            input1.style.padding = '10px';
 
-        const label2 = document.createElement('label');
-        label2.setAttribute('for', 'input2');
-        label2.innerHTML = 'Date To &#160;&#160;&#160;&#160;:';
-        label2.style.padding = '20px';
-        const input2 = document.createElement('input');
-        input2.type = 'text';
-        input2.id = 'input2';
-        input2.style.margin = '20px';
-        input2.style.background = '#444545';
-        input2.style.color = '#afbccf';
-        input2.style.bordeRadius = '50px';
-        input2.style.padding = '10px';
+            const label2 = document.createElement('label');
+            label2.setAttribute('for', 'input2');
+            label2.innerHTML = 'Date To &#160;&#160;&#160;&#160;:';
+            label2.style.padding = '20px';
+            const input2 = document.createElement('input');
+            input2.type = 'text';
+            input2.id = 'input2';
+            input2.style.margin = '20px';
+            input2.style.background = '#444545';
+            input2.style.color = '#afbccf';
+            input2.style.bordeRadius = '50px';
+            input2.style.padding = '10px';
 
-        const submitButton = document.createElement('button');
-        submitButton.innerText = 'Submit';
-        submitButton.style.margin = '10px 25px';
-        submitButton.style.padding = '15px 30px';  // Adjust padding for better spacing
-        submitButton.style.borderRadius = '20px';
-        submitButton.style.backgroundColor = '#305c29';  // Add background color
-        submitButton.style.color = 'white';  // Change text color
-        submitButton.style.fontSize = '16px';  // Set font size
-        submitButton.style.fontWeight = 'bold';  // Make text bold
-        submitButton.style.cursor = 'pointer';  // Change cursor to pointer on hover
-        submitButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';  // Add shadow effect
-        submitButton.style.transition = 'background-color 0.3s, box-shadow 0.3s';  // Add transition effect
+            const submitButton = document.createElement('button');
+            submitButton.innerText = 'Submit';
+            submitButton.style.margin = '10px 25px';
+            submitButton.style.padding = '15px 30px';  // Adjust padding for better spacing
+            submitButton.style.borderRadius = '20px';
+            submitButton.style.backgroundColor = '#305c29';  // Add background color
+            submitButton.style.color = 'white';  // Change text color
+            submitButton.style.fontSize = '16px';  // Set font size
+            submitButton.style.fontWeight = 'bold';  // Make text bold
+            submitButton.style.cursor = 'pointer';  // Change cursor to pointer on hover
+            submitButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';  // Add shadow effect
+            submitButton.style.transition = 'background-color 0.3s, box-shadow 0.3s';  // Add transition effect
 
-        // Add hover effect
-        submitButton.addEventListener('mouseover', () => {
-            submitButton.style.backgroundColor = '#0056b3';  // Darken background on hover
-            submitButton.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.3)';  // Increase shadow on hover
+            // Add hover effect
+            submitButton.addEventListener('mouseover', () => {
+                submitButton.style.backgroundColor = '#0056b3';  // Darken background on hover
+                submitButton.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.3)';  // Increase shadow on hover
+            });
+
+            submitButton.addEventListener('mouseout', () => {
+                submitButton.style.backgroundColor = '#305c29';  // Revert background color
+                submitButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';  // Revert shadow
+            });
+
+            submitButton.onclick = function () {
+                date_from = input1.value;
+                date_to = input2.value;
+                alert(`Download cuts Report For? : \n Date_from: ${date_from} \n Date_to : ${date_to}`);
+                document.body.removeChild(promptContainer);
+                document.body.removeChild(overlay);
+                resolve([date_from, date_to]);  // Resolve the promise with the input values
+            };
+
+            const cancelButton = document.createElement('button');
+            cancelButton.innerText = 'Cancel';
+            cancelButton.style.margin = '10px 25px';
+            cancelButton.style.padding = '15px 30px';  // Adjust padding for better spacing
+            cancelButton.style.borderRadius = '20px';
+            cancelButton.style.backgroundColor = '#c71204';  // Add background color
+            cancelButton.style.color = 'white';  // Change text color
+            cancelButton.style.fontSize = '16px';  // Set font size
+            cancelButton.style.fontWeight = 'bold';  // Make text bold
+            cancelButton.style.cursor = 'pointer';  // Change cursor to pointer on hover
+            cancelButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';  // Add shadow effect
+            cancelButton.style.transition = 'background-color 0.3s, box-shadow 0.3s';  // Add transition effect
+
+            // Add hover effect
+            cancelButton.addEventListener('mouseover', () => {
+                cancelButton.style.backgroundColor = '#0056b3';  // Darken background on hover
+                cancelButton.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.3)';  // Increase shadow on hover
+            });
+
+            cancelButton.addEventListener('mouseout', () => {
+                cancelButton.style.backgroundColor = '#c71204';  // Revert background color
+                cancelButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';  // Revert shadow
+            });
+            cancelButton.onclick = function () {
+                document.body.removeChild(promptContainer);
+                document.body.removeChild(overlay);
+                resolve(null);  // Resolve with null if the user cancels the prompt
+            };
+
+            // Append elements to the prompt container
+            promptContainer.appendChild(title);
+            promptContainer.appendChild(label1);
+            promptContainer.appendChild(input1);
+            promptContainer.appendChild(document.createElement('br'));
+            promptContainer.appendChild(label2);
+            promptContainer.appendChild(input2);
+            promptContainer.appendChild(document.createElement('br'));
+            promptContainer.appendChild(submitButton);
+            promptContainer.appendChild(cancelButton);
+
+            // Append the prompt container and overlay to the body
+            document.body.appendChild(promptContainer);
+            document.body.appendChild(overlay);
         });
-
-        submitButton.addEventListener('mouseout', () => {
-            submitButton.style.backgroundColor = '#305c29';  // Revert background color
-            submitButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';  // Revert shadow
-        });
-
-        submitButton.onclick = function () {
-            date_from = input1.value;
-            date_to = input2.value;
-            alert(`Download cuts Report For? : \n Date_from: ${date_from} \n Date_to : ${date_to}`);
-            document.body.removeChild(promptContainer);
-            document.body.removeChild(overlay);
-            resolve([date_from, date_to]);  // Resolve the promise with the input values
-        };
-
-        const cancelButton = document.createElement('button');
-        cancelButton.innerText = 'Cancel';
-        cancelButton.style.margin = '10px 25px';
-        cancelButton.style.padding = '15px 30px';  // Adjust padding for better spacing
-        cancelButton.style.borderRadius = '20px';
-        cancelButton.style.backgroundColor = '#c71204';  // Add background color
-        cancelButton.style.color = 'white';  // Change text color
-        cancelButton.style.fontSize = '16px';  // Set font size
-        cancelButton.style.fontWeight = 'bold';  // Make text bold
-        cancelButton.style.cursor = 'pointer';  // Change cursor to pointer on hover
-        cancelButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';  // Add shadow effect
-        cancelButton.style.transition = 'background-color 0.3s, box-shadow 0.3s';  // Add transition effect
-
-        // Add hover effect
-        cancelButton.addEventListener('mouseover', () => {
-            cancelButton.style.backgroundColor = '#0056b3';  // Darken background on hover
-            cancelButton.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.3)';  // Increase shadow on hover
-        });
-
-        cancelButton.addEventListener('mouseout', () => {
-            cancelButton.style.backgroundColor = '#c71204';  // Revert background color
-            cancelButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';  // Revert shadow
-        });
-        cancelButton.onclick = function () {
-            document.body.removeChild(promptContainer);
-            document.body.removeChild(overlay);
-            resolve(null);  // Resolve with null if the user cancels the prompt
-        };
-
-        // Append elements to the prompt container
-        promptContainer.appendChild(title);
-        promptContainer.appendChild(label1);
-        promptContainer.appendChild(input1);
-        promptContainer.appendChild(document.createElement('br'));
-        promptContainer.appendChild(label2);
-        promptContainer.appendChild(input2);
-        promptContainer.appendChild(document.createElement('br'));
-        promptContainer.appendChild(submitButton);
-        promptContainer.appendChild(cancelButton);
-
-        // Append the prompt container and overlay to the body
-        document.body.appendChild(promptContainer);
-        document.body.appendChild(overlay);
-    });
-}
+    }
 
 
-async function downloadReport( d1, d2) {
+    async function downloadReport(d1, d2) {
         try {
             const response = await fetch('/download_report', {
                 method: 'POST',
                 headers: {
                     "content-Type": 'application/json'
                 },
-                body:JSON.stringify({
-                    date_from:d1,
-                    date_to :d2
+                body: JSON.stringify({
+                    date_from: d1,
+                    date_to: d2
                 })
             });
 
@@ -289,9 +366,9 @@ async function downloadReport( d1, d2) {
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
-            let name = getFormattedDateTime()+ 'Bias_Cutter_Report.xlsx';
+            let name = getFormattedDateTime() + 'Bias_Cutter_Report.xlsx';
             a.href = url;
-            a.download =name;
+            a.download = name;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -303,18 +380,18 @@ async function downloadReport( d1, d2) {
         }
     }
 
-document.querySelector("#rd").addEventListener('click', async function (event) {
-    const array = await showTwoInputPrompt();  // Wait for the promise to resolve
-    if (array) {
-        date_from = array[0];
-        date_to = array[1];
-        console.log(`Downloading cut report for : date_from=${date_from}, date_to=${date_to}`);
-        downloadReport(d1=date_from, d2=date_to);
+    document.querySelector("#rd").addEventListener('click', async function (event) {
+        const array = await showTwoInputPrompt();  // Wait for the promise to resolve
+        if (array) {
+            date_from = array[0];
+            date_to = array[1];
+            console.log(`Downloading cut report for : date_from=${date_from}, date_to=${date_to}`);
+            downloadReport(d1 = date_from, d2 = date_to);
 
-    } else {
-        console.log('Prompt was canceled.');
-    }
-});
+        } else {
+            console.log('Prompt was canceled.');
+        }
+    });
 
 </script>
 
@@ -391,12 +468,12 @@ document.querySelector("#rd").addEventListener('click', async function (event) {
             submitButton.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.2)';  // Revert shadow
         });
 
-        submitButton.addEventListener('click',  function () {
+        submitButton.addEventListener('click', function () {
             const value1 = input1.value;
-            output.date=value1;
+            output.date = value1;
             document.body.removeChild(promptContainer);
             document.body.removeChild(overlay);
-            
+
         });
 
         const cancelButton = document.createElement('button');
@@ -530,7 +607,7 @@ document.querySelector("#rd").addEventListener('click', async function (event) {
         const status = document.querySelector("#status")
         pass = prompt("Enter Password to update script")
         if (pass === "ASH-950-OL") {
-            document.querySelector("#status").innerHTML = "Loading...."
+            document.querySelector("#status").value = "Loading...."
             fetch('/sync_recipe',
                 {
                     method: 'POST',
@@ -581,7 +658,7 @@ document.querySelector("#rd").addEventListener('click', async function (event) {
         event.preventDefault();
         syncRecipe();
         await delay(ms = 2000);
-        document.querySelector("#status").innerHTML = " "
+        document.querySelector("#status").value = " "
     })
 </script>
 <!-- download existsing recipe -->
@@ -592,10 +669,10 @@ document.querySelector("#rd").addEventListener('click', async function (event) {
         event.preventDefault(); // Prevent the default action
         const pass = prompt("Enter Password to download script");
         if (pass === "ASH-950-OL") {
-            document.querySelector("#status").innerHTML = "Downloading....";
+            document.querySelector("#status").value = "Downloading....";
             await downloadFile();
             await delay();
-            document.querySelector("#status").innerHTML = "";
+            document.querySelector("#status").value = "";
         } else {
             alert("Wrong password, retry");
         }
@@ -657,21 +734,21 @@ document.querySelector("#rd").addEventListener('click', async function (event) {
     }
     document.querySelector("#formatServer").addEventListener('click', async function (event) {
         document.querySelector("#formatServer").classList.add('bg-zinc-700', 'hover:bg-red-700', 'transform', 'scale-110');
-        document.querySelector("#status").innerHTML = "Deleting...."
+        document.querySelector("#status").value = "Deleting...."
         let pass = prompt("Enter the password to delete data:")
         let value = confirm("Do You want to delete all recipe data?\n Once data deleted can not be recovered!!")
         if (value) {
             await deleteServer(password = pass);
             await delay(ms = 2000);
             document.querySelector("#status").style.color = ok_yellow
-            document.querySelector("#status").innerHTML = "Deleted !!"
+            document.querySelector("#status").value = "Deleted !!"
         }
         else {
             document.querySelector("#status").style.color = red
-            document.querySelector("#status").innerHTML = "Delete failed !!...."
+            document.querySelector("#status").value = "Delete failed !!...."
         }
         await delay(ms = 2000);
-        document.querySelector("#status").innerHTML = ""
+        document.querySelector("#status").value = ""
     });
 
 
