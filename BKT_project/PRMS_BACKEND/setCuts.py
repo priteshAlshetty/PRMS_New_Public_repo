@@ -8,7 +8,6 @@ conn = mysql.connector.connect(
     port ="3306",
     password ="ASD-90K-10B8"
 )
-
 def setCutsUpdate(connection, selectData:list):
     # Check if the connection was successful
     # script to update and insert schedule on server
@@ -26,7 +25,6 @@ def setCutsUpdate(connection, selectData:list):
                 )
         except Exception as e:
             print(f"error at calculating PROD_ID:{e}")
-            
         setCuts = list()
         row =list()
     else:
@@ -48,7 +46,7 @@ def setCutsUpdate(connection, selectData:list):
             if flag!= None:
                 try:
                     cursor.execute("""UPDATE `recipe_prod` SET 
-                                    `SET_TYRES_PLY_1`= `SET_TYRES_PLY_1`+%s, `SET_TYRES_PLY_2`=`SET_TYRES_PLY_2`+%s, `SET_TYRES_PLY_3`=`SET_TYRES_PLY_3`+%s, `SET_TYRES_PLY_4`=`SET_TYRES_PLY_4`+%s, `SET_TYRES_PLY_5`=`SET_TYRES_PLY_5`+%s, `SET_TYRES_PLY_6`=`SET_TYRES_PLY_6`+%s, `SET_TYRES_PLY_7`=`SET_TYRES_PLY_7`+%s, `SET_TYRES_PLY_8`=`SET_TYRES_PLY_8`+%s, `SET_TYRES_PLY_9`=`SET_TYRES_PLY_9`+%s, `SET_TYRES_PLY_10`=`SET_TYRES_PLY_10`+%s, `SET_TYRES_PLY_11`=`SET_TYRES_PLY_11`+%s , `SET_TYRES_PLY_12`=`SET_TYRES_PLY_12`+%s , `SET_TYRES_PLY_13`=`SET_TYRES_PLY_13`+%s , `SET_TYRES_PLY_14`=`SET_TYRES_PLY_14`+%s , `SET_CUTS_PLY_1`=`REQ_CUTS_PLY_1`+ %s , `SET_CUTS_PLY_2`=`REQ_CUTS_PLY_2`+ %s , `SET_CUTS_PLY_3`=`REQ_CUTS_PLY_3`+ %s , `SET_CUTS_PLY_4`=`REQ_CUTS_PLY_4`+ %s , `SET_CUTS_PLY_5`=`REQ_CUTS_PLY_5`+ %s , `SET_CUTS_PLY_6`=`REQ_CUTS_PLY_6`+ %s , `SET_CUTS_PLY_7`=`REQ_CUTS_PLY_7`+ %s , `SET_CUTS_PLY_8`=`REQ_CUTS_PLY_8`+ %s , `SET_CUTS_PLY_9`=`REQ_CUTS_PLY_9`+ %s , `SET_CUTS_PLY_10`=`REQ_CUTS_PLY_10`+ %s , `SET_CUTS_PLY_11`=`REQ_CUTS_PLY_11`+ %s , `SET_CUTS_PLY_12`=`REQ_CUTS_PLY_12`+ %s , `SET_CUTS_PLY_13`=`REQ_CUTS_PLY_13`+ %s , `SET_CUTS_PLY_14`=`REQ_CUTS_PLY_14`+ %s WHERE `PROD_ID` =%s""", row[1:] + [id[0]] )
+                                    `SET_TYRES_PLY_1`= %s, `SET_TYRES_PLY_2`=%s, `SET_TYRES_PLY_3`=%s, `SET_TYRES_PLY_4`=%s, `SET_TYRES_PLY_5`=%s, `SET_TYRES_PLY_6`=%s, `SET_TYRES_PLY_7`=%s, `SET_TYRES_PLY_8`=%s, `SET_TYRES_PLY_9`=%s, `SET_TYRES_PLY_10`=%s, `SET_TYRES_PLY_11`=%s , `SET_TYRES_PLY_12`=%s , `SET_TYRES_PLY_13`=%s , `SET_TYRES_PLY_14`=%s , `SET_CUTS_PLY_1`=`REQ_CUTS_PLY_1`+ %s , `SET_CUTS_PLY_2`=`REQ_CUTS_PLY_2`+ %s , `SET_CUTS_PLY_3`=`REQ_CUTS_PLY_3`+ %s , `SET_CUTS_PLY_4`=`REQ_CUTS_PLY_4`+ %s , `SET_CUTS_PLY_5`=`REQ_CUTS_PLY_5`+ %s , `SET_CUTS_PLY_6`=`REQ_CUTS_PLY_6`+ %s , `SET_CUTS_PLY_7`=`REQ_CUTS_PLY_7`+ %s , `SET_CUTS_PLY_8`=`REQ_CUTS_PLY_8`+ %s , `SET_CUTS_PLY_9`=`REQ_CUTS_PLY_9`+ %s , `SET_CUTS_PLY_10`=`REQ_CUTS_PLY_10`+ %s , `SET_CUTS_PLY_11`=`REQ_CUTS_PLY_11`+ %s , `SET_CUTS_PLY_12`=`REQ_CUTS_PLY_12`+ %s , `SET_CUTS_PLY_13`=`REQ_CUTS_PLY_13`+ %s , `SET_CUTS_PLY_14`=`REQ_CUTS_PLY_14`+ %s WHERE `PROD_ID` =%s""", row[1:] + [id[0]] )
                 except Exception as e:
                     print(e)
             else:
@@ -58,7 +56,6 @@ def setCutsUpdate(connection, selectData:list):
                 except Exception as e: 
                     print(e)
             setCuts = []
-        
         else:
             print(f"Conv_factors not found for PROD_ID {id[0]}")
             id_remove = id[0]

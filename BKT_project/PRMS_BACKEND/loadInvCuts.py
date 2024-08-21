@@ -3,7 +3,7 @@ from openpyxl import load_workbook
 from openpyxl.formula import Tokenizer
 from datetime import datetime
 
-
+# add cuts manually to required cuts of ply
 connection = conn.connect(
     host="localhost",
     user="backend_comm",
