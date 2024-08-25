@@ -10,6 +10,7 @@ from PRMS_BACKEND.loadInvCuts import loadInvCutsToProd
 from PRMS_BACKEND.recipeDownload import export_to_excel
 from PRMS_BACKEND.invCuts import uploadInvCuts
 from PRMS_BACKEND.downloadReport import downloadCutReport
+from PRMS_BACKEND.manualCuts import syncManualCuts
 
 filepath = list()
 
@@ -168,6 +169,7 @@ def uploadInv():
             #save file
             file.save(file_path)
             
+            
             print(f'filepath  :{file_path}')
             flag = uploadInvCuts(path=file_path)
             
@@ -199,13 +201,91 @@ def add_invCuts():
                             'message':'Inventory cuts are not added!! Retry',
                             'error':''})
 
+# @app.route('/upload_manual_cuts', methods=['POST'])
+# def upload_manual_cuts():
+#     pass
+##########
 @app.route('/upload_manual_cuts', methods=['POST'])
 def upload_manual_cuts():
-    pass
+    if 'file' not in request.files:
+        return jsonify({
+            'message': 'No file part found!',
+            'timestamp': str(datetime.datetime.now())[:-6],
+            'error': 'File not selected'
+        }), 400
+
+    file = request.files['file']
+    try:
+        if file.filename.endswith('.xlsx'):
+            # Define directory
+            target_dir = "manual_cuts"
+            if not os.path.exists(target_dir):
+                os.makedirs(target_dir)
+            filename = file.filename
+            file_path = os.path.join(target_dir, filename)
+
+            file.save(file_path)
+            session['manual.xlsx'] = file_path
+            saveLogs(log="Manual cuts selected to upload on server")
+            print(f'Filepath: {file_path}')
+
+            return jsonify({
+                'message': 'File uploaded successfully.',
+                'file_path': file_path,
+                'timestamp': str(datetime.datetime.now())[:-6]
+            }), 200
+        else:
+            return jsonify({
+                'timestamp': str(datetime.datetime.now())[:-6],
+                'message': 'Invalid file type.',
+                'error': 'Only .xlsx files are allowed.'
+            }), 400
+    except Exception as e:
+        print(f'Exception at API call of upload_manual_cuts(), error: {e}')
+        return make_response(jsonify({
+            'message': 'Internal Server Error',
+            'timestamp': str(datetime.datetime.now())[:-6],
+            'error': str(e)
+        }), 500)
+
 
 @app.route('/sync_manual_cuts', methods=['POST'])
 def sync_manual_cuts():
-    pass
+    try:
+        file_path = session.get('manual.xlsx')
+        if not file_path or not os.path.exists(file_path):
+            return jsonify({
+                'timestamp': str(datetime.datetime.now())[:-6],
+                'message': 'File not found or path not set.',
+                'error': 'Please upload a file before syncing.'
+            }), 400
+        
+        #  syncManualCuts function to process the file
+        flag = syncManualCuts(file_path)
+        if flag:
+            saveLogs(log="Manual Cuts synchronized successfully.")
+            return jsonify({
+                'timestamp': str(datetime.datetime.now())[:-6],
+                'message': 'Manual Cuts synchronized successfully!'
+            }), 200
+        else:
+            saveLogs(log="Manual Cuts synchronization failed.")
+            return jsonify({
+                'timestamp': str(datetime.datetime.now())[:-6],
+                'message': 'Manual Cuts synchronization failed.Flag Error. Please check the logs.',
+                'error': 'Synchronization error'
+            }), 400
+            return True
+    except Exception as e:
+        print(f'Exception at API call of sync_manual_cuts(), error: {e}')
+        return make_response(jsonify({
+            'message': 'Internal Server Error',
+            'timestamp': str(datetime.datetime.now())[:-6],
+            'error': 'Exception error'
+        }), 500)
+    return False
+
+
 
 @app.route('/download_report', methods=['POST'])
 def download_report():
@@ -236,4 +316,4 @@ def download_report():
 
 
 if __name__ == '__main__':
-    app.run(host='192.168.1.38', port=9600, debug=True)
+    app.run(host='127.0.0.1', port=9600, debug=True)
