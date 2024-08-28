@@ -77,7 +77,8 @@ def insert_new_record(connection, entry, size, fabric_name, width, angle):
     ply_braker = entry['PLY_BRAKER']
     shift = entry['Shift']
     manual_cuts = entry['Manual_Cuts']
-
+    length = entry['Length']
+    
     conv_value = get_conv_value(connection.cursor(), prod_id, ply_braker)
     if conv_value is not None and conv_value != 0:
         tyer = manual_cuts / conv_value
@@ -88,7 +89,7 @@ def insert_new_record(connection, entry, size, fabric_name, width, angle):
 
     try:
         cursor = connection.cursor()
-        set_cuts_column = f'SET_CUTS_PLY_{ply_braker}'
+        set_cuts_column = f'SET_CUTS_PLY_{ply_braker}'  
         set_tyres_column = f'SET_TYRES_PLY_{ply_braker}'
 
         set_cuts_query = f"SELECT {set_cuts_column} FROM recipe_prod WHERE PROD_ID = %s"
@@ -101,6 +102,13 @@ def insert_new_record(connection, entry, size, fabric_name, width, angle):
         set_tyres_result = cursor.fetchone()
         total_set_tyres = set_tyres_result[0] if set_tyres_result else 0
         
+        remain_cuts_col = f'REQ_CUTS_PLY_{ply_braker}'  
+        remain_cuts_query = f"SELECT {remain_cuts_col} FROM recipe_prod WHERE PROD_ID = %s"
+        cursor.execute(remain_cuts_query, (prod_id,))
+        remain_cuts_result =cursor.fetchone()
+        remain_cuts = remain_cuts_result[0] if remain_cuts_result else 0
+        remain_cuts = remain_cuts - manual_cuts
+        
     except Error as e:
         print(f"Error retrieving total_set_cuts or total_set_tyres: {e}")
         total_set_cuts = 0
@@ -109,12 +117,12 @@ def insert_new_record(connection, entry, size, fabric_name, width, angle):
         cursor.close()
 
     insert_query = """
-        INSERT INTO recipe_r (date_curr, PROD_ID, PLY_BRAKER, Shift, act_cuts, remain_cuts, act_tyres, remain_tyres, SIZE, FABRIC_NAME, WIDTH, ANGLE, total_set_cuts, total_set_tyres)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        INSERT INTO recipe_report  (date_curr, PROD_ID, PLY_BRAKER, Shift, act_cuts, remain_cuts, act_tyres, remain_tyres, SIZE, FABRIC_NAME, WIDTH, ANGLE, total_set_cuts, total_set_tyres,Length)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,%s)
     """
     
     cursor = connection.cursor()
-    cursor.execute(insert_query, (date_curr, prod_id, ply_braker, shift, manual_cuts, manual_cuts, tyer, remain_tyres, size, fabric_name, width, angle, total_set_cuts, total_set_tyres))
+    cursor.execute(insert_query, (date_curr, prod_id, ply_braker, shift, manual_cuts, remain_cuts, tyer, remain_tyres, size, fabric_name, width, angle, total_set_cuts, total_set_tyres, length))
     connection.commit()
     cursor.close()
     print(f"Inserted new record: date_curr={date_curr}, PROD_ID={prod_id}, PLY_BRAKER={ply_braker}, Shift={shift}, Manual_Cuts={manual_cuts}, TYER={tyer}, Total_Set_Cuts={total_set_cuts}, Total_Set_Tyres={total_set_tyres}")
@@ -125,6 +133,8 @@ def update_recipe_report(connection, entry):
     ply_braker = entry['PLY_BRAKER']
     shift = entry['Shift']
     manual_cuts = entry['Manual_Cuts']
+    length = entry['Length']
+    
 
     print(f"Checking: date_curr={date_curr}, PROD_ID={prod_id}, PLY_BRAKER={ply_braker}, Shift={shift}")
 
@@ -133,45 +143,43 @@ def update_recipe_report(connection, entry):
 
         check_query = """
             SELECT COUNT(*)
-            FROM recipe_r
+            FROM recipe_report 
             WHERE date_curr = %s AND PROD_ID = %s AND PLY_BRAKER = %s AND Shift = %s
         """  
+        
         cursor.execute(check_query, (date_curr, prod_id, ply_braker, shift))
         count = cursor.fetchone()[0]
-
-        cursor.fetchall()
-
-        print(f"Matching records found: {count}")
-
+        print(f"Matching records count: {count}")
+            
         if count > 0:
             conv_value = get_conv_value(cursor, prod_id, ply_braker)
             if conv_value is not None and conv_value != 0:
-                tyer = manual_cuts / conv_value
+                tyer = manual_cuts / conv_value  # calculate tyres equivalent to cuts
                 print(f"Calculated TYER: {tyer}")
 
-                current_tyer_query = """
+                current_tyre_query = """
                     SELECT act_tyres, remain_tyres
-                    FROM recipe_r
+                    FROM recipe_report 
                     WHERE date_curr = %s AND PROD_ID = %s AND PLY_BRAKER = %s AND Shift = %s
                 """
-                cursor.execute(current_tyer_query, (date_curr, prod_id, ply_braker, shift))
+                cursor.execute(current_tyre_query, (date_curr, prod_id, ply_braker, shift))
                 current_values = cursor.fetchone()
 
-                cursor.fetchall()
+                
 
                 if current_values:
                     current_act_tyer, current_remain_tyer = current_values
-                    new_act_tyer = current_act_tyer + tyer
+                    new_act_tyer = current_act_tyer + tyer         # logic for syncing tyres based on cuts
                     new_remain_tyer = current_remain_tyer - tyer
 
                     update_query = """
-                        UPDATE recipe_r
+                        UPDATE recipe_report 
                         SET act_cuts = act_cuts + %s, remain_cuts = remain_cuts - %s, 
-                            act_tyres = %s, remain_tyres = %s
-                        WHERE date_curr = %s AND PROD_ID = %s AND PLY_BRAKER = %s AND Shift = %s
+                            act_tyres = %s, remain_tyres = %s, Length =%s
+                        WHERE date_curr = %s AND PROD_ID = %s AND PLY_BRAKER = %s AND Shift = %s 
                     """
                     
-                    cursor.execute(update_query, (manual_cuts, manual_cuts, new_act_tyer, new_remain_tyer, date_curr, prod_id, ply_braker, shift))
+                    cursor.execute(update_query, (manual_cuts, manual_cuts, new_act_tyer, new_remain_tyer,length, date_curr, prod_id, ply_braker, shift))
                     connection.commit()
                     print(f"Updated: date_curr={date_curr}, PROD_ID={prod_id}, PLY_BRAKER={ply_braker}, Shift={shift}, Manual_Cuts={manual_cuts}, TYER={tyer}")
                 else:
@@ -179,6 +187,7 @@ def update_recipe_report(connection, entry):
             else:
                 print(f"Skipping update for PROD_ID={prod_id} due to missing or invalid CONV value.")
         else:
+            #insert new record of cuts if not found
             size = get_size(cursor, prod_id)
             fabric_name = get_fabric_name(cursor, prod_id, ply_braker)
             width = get_width(cursor, prod_id, ply_braker)
@@ -187,14 +196,21 @@ def update_recipe_report(connection, entry):
             if size and fabric_name and width and angle:
                 insert_new_record(connection, entry, size, fabric_name, width, angle)
             else:
-                print(f"Cannot insert new record due to missing data for PROD_ID={prod_id}")
-            
+                print(f" At manual cuts backend code, new entry insertion:Cannot insert new record for PROD_ID={prod_id}, because '{prod_id}' not present in recipeschdule")
+        
+        # update cuts on recipe_prod also
+        req_cuts_col = f'REQ_CUTS_PLY_{ply_braker}'  
+        query = f"UPDATE `recipe_prod` SET `{req_cuts_col}` = `{req_cuts_col}`- {manual_cuts} WHERE  `PROD_ID` = {prod_id}"
+        print(f"here:{query}")
+        cursor.execute(query)
+        
     except Error as e:
-        print(f"Database error during update: {e}")
+        print(f"Database error during update at Manual cuts Backend code: {e}")
         
     finally:
         if cursor:
             cursor.close()
+
 def syncManualCuts(file_path):
     """
     Upload and process manual cuts from the given Excel file path.
@@ -226,7 +242,8 @@ def syncManualCuts(file_path):
                 'PROD_ID': 'PROD_ID',
                 'PLY/BRAKER NO': 'PLY_BRAKER',
                 'Shift': 'Shift',
-                'Manual Cuts': 'Manual_Cuts'
+                'Manual Cuts': 'Manual_Cuts',
+                'Length': 'Length'
             }
         
             data = []
@@ -237,7 +254,9 @@ def syncManualCuts(file_path):
             print("Data extracted from Excel:", data)
 
             for entry in data:
+                print(f"entries:\n{entry}")
                 update_recipe_report(connection, entry)
+                
 
             return True
 
@@ -250,3 +269,4 @@ def syncManualCuts(file_path):
     #         print("MySQL connection closed")
 
 
+# syncManualCuts('BKT_project\\PRMS_BACKEND\\manual.xlsx')
