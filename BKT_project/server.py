@@ -10,7 +10,7 @@ from PRMS_BACKEND.loadInvCuts import loadInvCutsToProd
 from PRMS_BACKEND.recipeDownload import export_to_excel
 from PRMS_BACKEND.invCuts import uploadInvCuts
 from PRMS_BACKEND.downloadReport import downloadCutReport
-from PRMS_BACKEND.manualCuts import syncManualCuts
+from PRMS_BACKEND.manualCuts import syncManualCuts # pratiksha 
 
 filepath = list()
 
@@ -150,7 +150,6 @@ def get_id_details():
     Dict_obj = getDetails(id=prod_id)
     pprint(Dict_obj)
     return jsonify(Dict_obj)
-    
 
 @app.route('/upload_invcuts', methods=['GET','POST'])
 def uploadInv():
@@ -170,7 +169,7 @@ def uploadInv():
             file.save(file_path)
             
             
-            print(f'filepath  :{file_path}')
+            print(f'filepath of invcuts.xlsx :{file_path}')
             flag = uploadInvCuts(path=file_path)
             
             if flag:
@@ -178,9 +177,14 @@ def uploadInv():
                 return jsonify({'message': file_path, 'timestamp':str(datetime.datetime.now())[:-6]}), 200
             else:
                 saveLogs(log = "Inv Cuts upload error,uploadInvCuts()  returned a false value")
+                # remove inv.xlsx after uploading 
+                if  os.path.exists(file_path):
+                    os.rmdir(file_path)
                 return jsonify({'message': 'Inv Cuts Upload failed , recheck file and upload again', 'timestamp':str(datetime.datetime.now())[:-6], 'error':'refer Logs, uploadInvCuts() returned false value'}), 400
         else:
             return jsonify({  'timestamp':str(datetime.datetime.now())[:-6] ,'flag':flag, 'message': 'Wrong FILE', 'error':' only .xlsx are allowed to upload' }), 400
+        
+        os.rmdir(file_path)
     except Exception as e:
         print(f'exception at API call of uploadInvCuts(), error:{e}')
         return make_response(jsonify({
@@ -225,7 +229,7 @@ def upload_manual_cuts():
             file_path = os.path.join(target_dir, filename)
 
             file.save(file_path)
-            session['manual.xlsx'] = file_path
+            session['manual.xlsx'] = file_path   # store path in session variable
             saveLogs(log="Manual cuts selected to upload on server")
             print(f'Filepath: {file_path}')
 
@@ -275,7 +279,7 @@ def sync_manual_cuts():
                 'message': 'Manual Cuts synchronization failed.Flag Error. Please check the logs.',
                 'error': 'Synchronization error'
             }), 400
-            return True
+
     except Exception as e:
         print(f'Exception at API call of sync_manual_cuts(), error: {e}')
         return make_response(jsonify({
@@ -283,9 +287,6 @@ def sync_manual_cuts():
             'timestamp': str(datetime.datetime.now())[:-6],
             'error': 'Exception error'
         }), 500)
-    return False
-
-
 
 @app.route('/download_report', methods=['POST'])
 def download_report():

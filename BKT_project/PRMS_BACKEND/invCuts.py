@@ -18,18 +18,20 @@ def uploadInvCuts(path:str):
     port ="3306",
     password ="ASD-90K-10B8"
     )
-    
-    inv_data = read_excel_conv(filepath=path)
-    if connection.is_connected():
-        print("Connected to MySQL database")
-        # Create a cursor object to execute SQL queries
-        cursor = connection.cursor()
-        cursor.execute("DELETE FROM `recipe_inv` WHERE 1")
-        inv_data = inv_data[1:]
-        for row in inv_data:
-            values = tuple(row)
-            cursor.execute("INSERT INTO `recipe_inv` VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",values)
-            print(f'inv cuts inserted for id:{values[0]}')
-        return True
-    
-# uploadInvCuts(path='inv_cuts\\inv_1.xlsx')
+    try:
+        inv_data = read_excel_conv(filepath=path)
+        if connection.is_connected():
+            print("Connected to MySQL database")
+            # Create a cursor object to execute SQL queries
+            cursor = connection.cursor()
+            cursor.execute("DELETE FROM `recipe_inv` WHERE 1")
+            inv_data = inv_data[1:]
+            for row in inv_data:
+                values = tuple(row)
+                cursor.execute("INSERT INTO `recipe_inv` VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",values)
+                print(f'inv cuts inserted for id:{values[0]}')
+            return True
+    except Exception as e:
+        print(f'error at backend invCuts.py, uploadInvCuts(), err:{e} ')
+        return False
+# uploadInvCuts(path='C:\\Users\\Admin\\Documents\\recipes_bkt_prms\\inv_1.xlsx')
